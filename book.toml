@@ -1,0 +1,6 @@
+[book]
+authors = ["Max Orok"]
+language = "en"
+multilingual = false
+src = "src"
+title = "EGS_Mesh documentation"
