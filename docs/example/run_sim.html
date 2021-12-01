@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Example simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write a egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html" class="active"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html" class="active"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="../egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="../step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="../dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,6 +148,75 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#run-the-simulation-and-view-the-results" id="run-the-simulation-and-view-the-results">Run the simulation and view the results</a></h1>
+<p>To run the simulation, we'll use the <code>mevegs</code> user code, which outputs the results to a VTK file to be analyzed in Paraview.</p>
+<blockquote>
+<p>As an <code>egs++</code> geometry, <code>EGS_Mesh</code> is technically usable from any <code>egs++</code> application. But <code>mevegs</code> converts <code>EGS_Mesh</code> results to VTK for quick analysis without any extra steps.</p>
+</blockquote>
+<p>Back when we created the mesh file, we also assigned media names. In this example, the only media was <code>H2O</code>, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding simulation data loaded. This can either be done by specifying a <code>pegs4dat</code> file using the <code>-p</code> flag on the command line, or defining the media in the input file. Either method is fine, but for this example we'll use a <code>pegs4dat</code> file. The file <code>tutor_data.pegs4dat</code> comes bundled with EGSnrc and has a definition of <code>H2O</code>.</p>
+<p>Enter the <code>mevegs</code> directory in <code>egs_home</code> and run the simulation:</p>
+<p><code>mevegs -i cube.egsinp -p tutor_data.pegs4dat</code></p>
+<p>Make sure the <code>cube.msh</code> file is in the same directory you're running the code in.</p>
+<p>EGSnrc will print a few screens of information to the console and then report simulation progress until it's done. </p>
+<pre><code class="language-text">Running 1000000 histories
+
+  Batch             CPU time        Result   Uncertainty(%)
+==========================================================
+      1                2.30     0.00470093           2.36
+      2                4.82     0.00483381           1.67
+      3                6.94     0.00481503           1.36
+      4                9.03     0.00479555           1.18
+      5               11.21      0.0047708           1.06
+      6               13.44     0.00474837           0.96
+      7               15.91     0.00473835           0.89
+      8               17.97     0.00475373           0.83
+      9               20.32     0.00476651           0.79
+     10               22.21     0.00474332           0.75
+
+
+Finished simulation
+
+Total cpu time for this run:            22.21 (sec.) 0.0062(hours)
+Histories per hour:                     1.62089e+08
+Number of random numbers used:          295050812
+Number of electron CH steps:            1.43683e+07
+Number of all electron steps:           2.24998e+07
+
+
+ last case = 2429137 Etot = 1e+07
+
+
+================================================================================
+Finished simulation
+
+  Elapsed time:                   26.0 s (  0.007 h)
+  CPU time:                       25.7 s (  0.007 h)
+  Ratio:                          1.015
+</code></pre>
+<p>Afterwards, there should be a new file called <code>cube.vtk</code>. Start Paraview and open this file using <code>File-&gt;Open</code>, and <code>Apply</code> in the <code>Properties</code> toolbar. Color the mesh by <code>dose</code> to see the dose results.</p>
+<p><img src="./cube_dose.png" alt="View the dose results" /></p>
+<p>And you're done! That's a full <code>EGS_Mesh</code> simulation from start to finish. Color the mesh by <code>uncertainty</code> to see whether these results can be trusted, or if you need to run more histories to be sure. </p>
+<h3><a class="header" href="#going-further" id="going-further">Going further</a></h3>
+<ol>
+<li>
+<p>Refine the mesh and run another simulation. How did the simulation runtime change? Do the results look different? More refined meshes are required to observe accurate dose gradients.</p>
+</li>
+<li>
+<p>After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run 1B histories?</p>
+</li>
+<li>
+<p>Run an <code>EGS_XYZGeometry</code> simulation with a similar number of elements and compare the simulation runtimes. Typically, <code>EGS_Mesh</code> simulations are 2 to 3 times slower than <code>EGS_XYZGeometry</code>. Do you observe this? How do the results compare?</p>
+</li>
+<li>
+<p>The dose result is fairly uneven, especially for coarse meshes like this one. Why? Does this persist if you keep refining the mesh?</p>
+</li>
+</ol>
+<h3><a class="header" href="#references" id="references">References</a></h3>
+<ul>
+<li><a href="https://nrc-cnrc.github.io/EGSnrc/">EGSnrc home page</a></li>
+<li><a href="https://nrc-cnrc.github.io/EGSnrc/doc/pirs898/">EGSnrc <code>egs++</code> library manual</a></li>
+<li><a href="https://gmsh.info/doc/texinfo/gmsh.html">Gmsh reference manual</a></li>
+<li><a href="https://docs.paraview.org/en/latest/">Paraview manual</a></li>
+</ul>
 
                     </main>
 
@@ -159,6 +228,10 @@
                             </a>
                         
 
+                        
+                            <a rel="next" href="../egsinp_syntax.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -173,6 +246,10 @@
                     </a>
                 
 
+                
+                    <a rel="next" href="../egsinp_syntax.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                 
             </nav>
 

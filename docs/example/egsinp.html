@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Write a egsinp file - EGS_Mesh documentation</title>
+        <title>Write an egsinp file - EGS_Mesh documentation</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Example simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html" class="active"><strong aria-hidden="true">2.2.</strong> Write a egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html" class="active"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="../egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="../step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="../dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -147,7 +147,72 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#write-a-egsinp-file" id="write-a-egsinp-file">Write a egsinp file</a></h1>
+                        <h1><a class="header" href="#write-an-egsinp-file" id="write-an-egsinp-file">Write an egsinp file</a></h1>
+<p>Now, you're ready to make a new simulation input file. The three required input file sections are:</p>
+<ol>
+<li>Geometry definition</li>
+<li>Source definition </li>
+<li>Run control</li>
+</ol>
+<p>First up, let's define the mesh geometry. An <code>EGS_Mesh</code> geometry block looks like:</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = cube.msh # your mesh here
+    :stop geometry:
+    simulation geometry = my_mesh
+:stop geometry definition:
+</code></pre>
+<p>The only input we need to adjust is the mesh <code>file</code>. If you're following the guide, this file should be called <code>cube.msh</code>.</p>
+<p>Next, the source. Let's define an exterior point source. The meshed box starts at the origin and extends 10cm along <code>x</code>, <code>y</code> and <code>z</code>. So placing the source at <code>(5, 5, -1)</code> means the source will be 1cm away from the box's <code>-z</code> face. We'll simulate a 10MeV photon monoenergetic point source.</p>
+<pre><code class="language-text">:start source definition:
+    :start source:
+        library     = egs_point_source
+        name        = my_source
+        position    = 5 5 -1
+        :start spectrum:
+            type    = monoenergetic
+            energy  = 10
+        :stop spectrum:
+        charge      = 0
+    :stop source:
+    simulation source = my_source
+:stop source definition:
+</code></pre>
+<p>And finally, the run control section. Let's run 1 million histories.</p>
+<pre><code class="language-text">:start run control:
+    ncase = 1e6
+:stop run control:
+</code></pre>
+<p>The input file is done, and you're ready to <a href="./run_sim.html">run the simulation</a>.</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = cube.msh
+    :stop geometry:
+    simulation geometry = my_mesh
+:stop geometry definition:
+
+:start source definition:
+    :start source:
+        library     = egs_point_source
+        name        = my_source
+        position    = 5 5 -1
+        :start spectrum:
+            type    = monoenergetic
+            energy  = 10
+        :stop spectrum:
+        charge      = 0
+    :stop source:
+    simulation source = my_source
+:stop source definition:
+
+:start run control:
+    ncase = 1e6
+:stop run control:
+</code></pre>
 
                     </main>
 

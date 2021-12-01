@@ -1,20 +1,25 @@
 # Generate an input mesh
 
+`EGS_Mesh` simulations have three steps:
+1. Create an input mesh file for your geometry
+2. Write an `egsinp` file for your simulation
+3. Run the simulation and view the results
+
 Before creating a mesh, we have decide what we want to simulate. This can range from a single tetrahedron to a multi-million element mesh derived from a CAD file. For this example, we're going to simulate a cube of water. The cube will have side lengths of 10cm for a total volume of 1000 cm³.
 
 <p align="center">
-	<img width=400 src="./water_cube.png" alt="Water cube">
+	<img width="40%" src="./water_cube.png" alt="Water cube">
 </p>
 
 ## Creating the geometry using Gmsh
 
-> For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh.
+> For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh ourselves.
 
 First, open Gmsh. Create a new script file using `File->New` called `cube.geo`. If prompted, use the `OpenCASCADE` geometry kernel. Create a 10cm cube using:
 
 **`Geometry->Elementary entities->Add->Box`**
 
-After adding the box, hit the `q` key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, `EGS_Mesh` assumes Gmsh input files are given in cm.
+After adding the box, hit the `q` key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, `EGS_Mesh` assumes mesh files are given in cm.
 
 ![Adding a box](./gmsh_add_box_geom.png)
 
@@ -56,12 +61,35 @@ $EndPhysicalNames
 
 Here, the format version is confirmed to be 4.1, and the only media name is `H2O`. Further on in the file, node coordinates and element nodes are also stored. The `msh` format is documented [here](http://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format). 
 
-With a fresh input mesh file in hand, we're ready to write an EGSnrc input file.
+With a fresh input mesh file in hand, you're ready to write an EGSnrc input file.
 
-**Note:** the full mesh file contents are saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.
+## Scripting in Gmsh
+
+If GUIs aren't your thing, Gmsh also has a scripting interface. Every action in the GUI is written to a project script file, which can be edited and reloaded on the fly.
+
+The script for this session looks like:
+
+```text
+SetFactory("OpenCASCADE");
+Box(1) = {0, 0, 0, 10, 10, 10};
+Physical Volume("H2O") = {1};
+```
+
+You can edit the script using `Geometry->Edit script`. After you make changes and save, reload it with `Geometry->Reload script`. Gmsh also provides language bindings for Python, C++, Julia and C, but this requires installing the Gmsh Software Development Kit.
+
+### Going further
+
+1. Try meshing another geometry, like a `Torus`.
+
+2. There are a few ways to generate a more refined mesh in Gmsh. The most straightforward way is to adjust the maximum element size (`Tools->Options->Mesh->General->Max element size`). Try obtaining a mesh with roughly 50,000 elements by varying the maximum element size. Before remeshing, hit the `0` key to reset the old mesh. If you need to refine just a few mesh areas, check out the Gmsh documentation about [size fields](https://gmsh.info/doc/texinfo/gmsh.html#Specifying-mesh-element-sizes).
+
+3. Change the meshing algorithm using `Tools->Options->Mesh->3D algorithm` and remesh. Do you observe any difference in the generated mesh? For complex models, sometimes one algorithm succeeds where another fails.
+
+
+**Note:** the full mesh file is saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.
 
 <details>
-<summary> cube.msh </summary>
+<summary> cube.msh file </summary>
 
 ```text
 $MeshFormat

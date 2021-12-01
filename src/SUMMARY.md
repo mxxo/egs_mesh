@@ -1,7 +1,10 @@
 # Summary
 
-- [Getting started](./quickstart.md)
-- [Example simulation](./example/example.md)
+- [EGS_Mesh](./quickstart.md)
+- [Guided simulation](./example/example.md)
     - [Generate an input mesh](./example/input_mesh.md)
-    - [Write a egsinp file](./example/egsinp.md)
+    - [Write an egsinp file](./example/egsinp.md)
     - [Run the simulation and view the results](./example/run_sim.md)
+- [Egsinp syntax](./egsinp_syntax.md)
+- [STEP file simulation (WIP)](./step/step.md)
+- [Developer reference (WIP)](./dev/ref.md)

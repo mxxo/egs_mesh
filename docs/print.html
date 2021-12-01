@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="quickstart.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="example/example.html"><strong aria-hidden="true">2.</strong> Example simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write a egsinp file</a></li><li class="chapter-item expanded "><a href="example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -151,48 +151,17 @@
                     <main>
                         <h1><a class="header" href="#egs_mesh" id="egs_mesh">EGS_Mesh</a></h1>
 <p><code>EGS_Mesh</code> is a general-purpose unstructured tetrahedral mesh library for <a href="https://nrc-cnrc.github.io/EGSnrc/">EGSnrc</a>.</p>
-<p><code>EGS_Mesh</code> offers increased modelling flexibility over traditional voxel-based simulations. Instead of building up a geometry using a constructive-solid approach, <code>EGS_Mesh</code> takes a tetrahedral mesh file as input. Geometries created in CAD can be meshed and then simulated directly. <code>EGS_Mesh</code> relies on the standalone tool <a href="https://gmsh.info/">Gmsh</a> to generate meshes.</p>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<h3><a class="header" href="#basic-input-file-syntax" id="basic-input-file-syntax">Basic input file syntax</a></h3>
-<pre><code class="language-text">:start geometry description:
-    :start geometry:
-        library = egs_mesh
-        name = my_mesh
-        file = model.msh     # your mesh here
-    :stop geometry:
+<p><code>EGS_Mesh</code> offers modelling flexibility over traditional voxel-based simulations. Instead of building up a geometry using a constructive-solid approach, <code>EGS_Mesh</code> takes a tetrahedral mesh file as input. Tetrahedral meshes can accurately model complex geometries with fewer elements compared to hexahedral voxels. Geometries created in CAD can be meshed and then simulated directly. <code>EGS_Mesh</code> uses the Gmsh <code>msh</code> format as mesh input. Users can generate meshes using the standalone tool <a href="https://gmsh.info/">Gmsh</a>, or create a <code>msh</code> file from their data.</p>
+<p float="middle">
+	<img width="49%" src="./mesh_egg.png" alt="Mesh egg">
+	<img width="49%" src="./cube_dose.png" alt="Cube dose">
+</p>
+<p>If you're new to <code>EGS_Mesh</code>, you can work through a <a href="./example/example.html">guided example</a>. You can also consult the <a href="./egsinp_syntax.html"><code>egsinp</code> syntax reference</a>. If you want to simulate STEP files using <code>EGS_Mesh</code>, check out the <a href="./step/step.html">STEP file example</a>.</p>
+<!---
+## Credits
 
-    simulation geometry = my_mesh
-:stop geometry description:
-</code></pre>
-<h3><a class="header" href="#in-an-envelope" id="in-an-envelope">In an envelope</a></h3>
-<pre><code class="language-text">:start geometry definition: 
-    :start geometry:        
-        library = egs_mesh
-        name = my_mesh    
-        file = model.msh 
-    :stop geometry:
-
-    # define a 50cm air cube at the origin
-    :start geometry:
-        library = egs_box
-        name = my_box
-        box size = 50 50 50
-        :start media input:
-            media = air
-        :stop media input:
-    :stop geometry:
-    
-    # embed the mesh in the air box
-    :start geometry:
-        library = egs_genvelope
-        name = my_envelope
-        base geometry = my_box
-        inscribed geometries = my_mesh
-    :stop geometry
-
-    simulation geometry = my_envelope
-:stop geometry definition:
-</code></pre>
+`EGS_Mesh` was created and open-sourced by [Mevex Corporation](https://www.mevex.com/). The code is maintained by the Canadian National Research Council as part of [EGSnrc](https://github.com/nrc-cnrc/EGSnrc).
+-->
 <h2><a class="header" href="#alternatives" id="alternatives">Alternatives</a></h2>
 <p>Other Monte Carlo codes that support tetrahedral mesh simulations include:</p>
 <ul>
@@ -200,40 +169,40 @@
 <li><a href="https://mcnp.lanl.gov/">MCNP6</a></li>
 <li><a href="https://phits.jaea.go.jp/">PHITS</a></li>
 </ul>
-<h1><a class="header" href="#example-simulation" id="example-simulation">Example simulation</a></h1>
-<p><code>EGS_Mesh</code> simulations have three steps:</p>
-<ol>
-<li>Create an input mesh file for your geometry, </li>
-<li>Write an <code>egsinp</code> file for your simulation, and</li>
-<li>Run the simulation and view the results.</li>
-</ol>
-<p>This guide walks you through each step and by the end, you'll have conducted a complete <code>EGS_Mesh</code> simulation from start to finish.</p>
-<p>We'll cover: </p>
+<h1><a class="header" href="#guided-simulation" id="guided-simulation">Guided simulation</a></h1>
+<p>This guide goes through a complete <code>EGS_Mesh</code> simulation step by step. By the end, you'll be ready to conduct your own simulations. Along the way we'll cover: </p>
 <ul>
-<li>Fundamental EGSnrc and <code>EGS_Mesh</code> concepts, </li>
-<li>Gmsh basics, </li>
-<li>Running EGSnrc simulations, and </li>
-<li>Viewing <code>EGS_Mesh</code> simulation results in Paraview.</li>
+<li>Fundamental EGSnrc and <code>EGS_Mesh</code> concepts</li>
+<li>Gmsh basics</li>
+<li>Running EGSnrc simulations</li>
+<li>Viewing <code>EGS_Mesh</code> simulation results in Paraview</li>
 </ul>
 <h2><a class="header" href="#prerequisites" id="prerequisites">Prerequisites</a></h2>
 <p>To follow along, you'll need the following software: </p>
 <ul>
-<li>EGSnrc with <code>EGS_Mesh</code> library support</li>
+<li>EGSnrc with <code>EGS_Mesh</code> library support and the <code>mevegs</code> user code</li>
 <li><a href="https://gmsh.info/#Download">Gmsh</a></li>
 <li><a href="https://www.paraview.org/download/">Paraview</a></li>
 </ul>
+<p>With that, you're ready to <a href="example/./input_mesh.html">start!</a></p>
 <h1><a class="header" href="#generate-an-input-mesh" id="generate-an-input-mesh">Generate an input mesh</a></h1>
+<p><code>EGS_Mesh</code> simulations have three steps:</p>
+<ol>
+<li>Create an input mesh file for your geometry</li>
+<li>Write an <code>egsinp</code> file for your simulation</li>
+<li>Run the simulation and view the results</li>
+</ol>
 <p>Before creating a mesh, we have decide what we want to simulate. This can range from a single tetrahedron to a multi-million element mesh derived from a CAD file. For this example, we're going to simulate a cube of water. The cube will have side lengths of 10cm for a total volume of 1000 cm³.</p>
 <p align="center">
-	<img width=400 src="example/./water_cube.png" alt="Water cube">
+	<img width="40%" src="example/./water_cube.png" alt="Water cube">
 </p>
 <h2><a class="header" href="#creating-the-geometry-using-gmsh" id="creating-the-geometry-using-gmsh">Creating the geometry using Gmsh</a></h2>
 <blockquote>
-<p>For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh.</p>
+<p>For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh ourselves.</p>
 </blockquote>
 <p>First, open Gmsh. Create a new script file using <code>File-&gt;New</code> called <code>cube.geo</code>. If prompted, use the <code>OpenCASCADE</code> geometry kernel. Create a 10cm cube using:</p>
 <p><strong><code>Geometry-&gt;Elementary entities-&gt;Add-&gt;Box</code></strong></p>
-<p>After adding the box, hit the <code>q</code> key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, <code>EGS_Mesh</code> assumes Gmsh input files are given in cm.</p>
+<p>After adding the box, hit the <code>q</code> key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, <code>EGS_Mesh</code> assumes mesh files are given in cm.</p>
 <p><img src="example/./gmsh_add_box_geom.png" alt="Adding a box" /></p>
 <h2><a class="header" href="#assigning-mesh-media" id="assigning-mesh-media">Assigning mesh media</a></h2>
 <p>Now, we have our cube geometry. But how will EGSnrc know it's made of water? We also have to assign material names to each volume. These will be read in by <code>EGS_Mesh</code> and each tetrahedron will be assigned the corresponding medium. Media names are specified using Gmsh <code>Physical Volumes</code>. Open the <code>Physical Volumes</code> dialog using:</p>
@@ -258,10 +227,30 @@ $EndPhysicalNames
 ... // continued
 </code></pre>
 <p>Here, the format version is confirmed to be 4.1, and the only media name is <code>H2O</code>. Further on in the file, node coordinates and element nodes are also stored. The <code>msh</code> format is documented <a href="http://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format">here</a>. </p>
-<p>With a fresh input mesh file in hand, we're ready to write an EGSnrc input file.</p>
-<p><strong>Note:</strong> the full mesh file contents are saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.</p>
+<p>With a fresh input mesh file in hand, you're ready to write an EGSnrc input file.</p>
+<h2><a class="header" href="#scripting-in-gmsh" id="scripting-in-gmsh">Scripting in Gmsh</a></h2>
+<p>If GUIs aren't your thing, Gmsh also has a scripting interface. Every action in the GUI is written to a project script file, which can be edited and reloaded on the fly.</p>
+<p>The script for this session looks like:</p>
+<pre><code class="language-text">SetFactory(&quot;OpenCASCADE&quot;);
+Box(1) = {0, 0, 0, 10, 10, 10};
+Physical Volume(&quot;H2O&quot;) = {1};
+</code></pre>
+<p>You can edit the script using <code>Geometry-&gt;Edit script</code>. After you make changes and save, reload it with <code>Geometry-&gt;Reload script</code>. Gmsh also provides language bindings for Python, C++, Julia and C, but this requires installing the Gmsh Software Development Kit.</p>
+<h3><a class="header" href="#going-further" id="going-further">Going further</a></h3>
+<ol>
+<li>
+<p>Try meshing another geometry, like a <code>Torus</code>.</p>
+</li>
+<li>
+<p>There are a few ways to generate a more refined mesh in Gmsh. The most straightforward way is to adjust the maximum element size (<code>Tools-&gt;Options-&gt;Mesh-&gt;General-&gt;Max element size</code>). Try obtaining a mesh with roughly 50,000 elements by varying the maximum element size. Before remeshing, hit the <code>0</code> key to reset the old mesh. If you need to refine just a few mesh areas, check out the Gmsh documentation about <a href="https://gmsh.info/doc/texinfo/gmsh.html#Specifying-mesh-element-sizes">size fields</a>.</p>
+</li>
+<li>
+<p>Change the meshing algorithm using <code>Tools-&gt;Options-&gt;Mesh-&gt;3D algorithm</code> and remesh. Do you observe any difference in the generated mesh? For complex models, sometimes one algorithm succeeds where another fails.</p>
+</li>
+</ol>
+<p><strong>Note:</strong> the full mesh file is saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.</p>
 <details>
-<summary> cube.msh </summary>
+<summary> cube.msh file </summary>
 <pre><code class="language-text">$MeshFormat
 4.1 0 8
 $EndMeshFormat
@@ -2223,8 +2212,203 @@ $Parametrizations
 $EndParametrizations
 </code></pre>
 </details>
-<h1><a class="header" href="#write-a-egsinp-file" id="write-a-egsinp-file">Write a egsinp file</a></h1>
+<h1><a class="header" href="#write-an-egsinp-file" id="write-an-egsinp-file">Write an egsinp file</a></h1>
+<p>Now, you're ready to make a new simulation input file. The three required input file sections are:</p>
+<ol>
+<li>Geometry definition</li>
+<li>Source definition </li>
+<li>Run control</li>
+</ol>
+<p>First up, let's define the mesh geometry. An <code>EGS_Mesh</code> geometry block looks like:</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = cube.msh # your mesh here
+    :stop geometry:
+    simulation geometry = my_mesh
+:stop geometry definition:
+</code></pre>
+<p>The only input we need to adjust is the mesh <code>file</code>. If you're following the guide, this file should be called <code>cube.msh</code>.</p>
+<p>Next, the source. Let's define an exterior point source. The meshed box starts at the origin and extends 10cm along <code>x</code>, <code>y</code> and <code>z</code>. So placing the source at <code>(5, 5, -1)</code> means the source will be 1cm away from the box's <code>-z</code> face. We'll simulate a 10MeV photon monoenergetic point source.</p>
+<pre><code class="language-text">:start source definition:
+    :start source:
+        library     = egs_point_source
+        name        = my_source
+        position    = 5 5 -1
+        :start spectrum:
+            type    = monoenergetic
+            energy  = 10
+        :stop spectrum:
+        charge      = 0
+    :stop source:
+    simulation source = my_source
+:stop source definition:
+</code></pre>
+<p>And finally, the run control section. Let's run 1 million histories.</p>
+<pre><code class="language-text">:start run control:
+    ncase = 1e6
+:stop run control:
+</code></pre>
+<p>The input file is done, and you're ready to <a href="example/./run_sim.html">run the simulation</a>.</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = cube.msh
+    :stop geometry:
+    simulation geometry = my_mesh
+:stop geometry definition:
+
+:start source definition:
+    :start source:
+        library     = egs_point_source
+        name        = my_source
+        position    = 5 5 -1
+        :start spectrum:
+            type    = monoenergetic
+            energy  = 10
+        :stop spectrum:
+        charge      = 0
+    :stop source:
+    simulation source = my_source
+:stop source definition:
+
+:start run control:
+    ncase = 1e6
+:stop run control:
+</code></pre>
 <h1><a class="header" href="#run-the-simulation-and-view-the-results" id="run-the-simulation-and-view-the-results">Run the simulation and view the results</a></h1>
+<p>To run the simulation, we'll use the <code>mevegs</code> user code, which outputs the results to a VTK file to be analyzed in Paraview.</p>
+<blockquote>
+<p>As an <code>egs++</code> geometry, <code>EGS_Mesh</code> is technically usable from any <code>egs++</code> application. But <code>mevegs</code> converts <code>EGS_Mesh</code> results to VTK for quick analysis without any extra steps.</p>
+</blockquote>
+<p>Back when we created the mesh file, we also assigned media names. In this example, the only media was <code>H2O</code>, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding simulation data loaded. This can either be done by specifying a <code>pegs4dat</code> file using the <code>-p</code> flag on the command line, or defining the media in the input file. Either method is fine, but for this example we'll use a <code>pegs4dat</code> file. The file <code>tutor_data.pegs4dat</code> comes bundled with EGSnrc and has a definition of <code>H2O</code>.</p>
+<p>Enter the <code>mevegs</code> directory in <code>egs_home</code> and run the simulation:</p>
+<p><code>mevegs -i cube.egsinp -p tutor_data.pegs4dat</code></p>
+<p>Make sure the <code>cube.msh</code> file is in the same directory you're running the code in.</p>
+<p>EGSnrc will print a few screens of information to the console and then report simulation progress until it's done. </p>
+<pre><code class="language-text">Running 1000000 histories
+
+  Batch             CPU time        Result   Uncertainty(%)
+==========================================================
+      1                2.30     0.00470093           2.36
+      2                4.82     0.00483381           1.67
+      3                6.94     0.00481503           1.36
+      4                9.03     0.00479555           1.18
+      5               11.21      0.0047708           1.06
+      6               13.44     0.00474837           0.96
+      7               15.91     0.00473835           0.89
+      8               17.97     0.00475373           0.83
+      9               20.32     0.00476651           0.79
+     10               22.21     0.00474332           0.75
+
+
+Finished simulation
+
+Total cpu time for this run:            22.21 (sec.) 0.0062(hours)
+Histories per hour:                     1.62089e+08
+Number of random numbers used:          295050812
+Number of electron CH steps:            1.43683e+07
+Number of all electron steps:           2.24998e+07
+
+
+ last case = 2429137 Etot = 1e+07
+
+
+================================================================================
+Finished simulation
+
+  Elapsed time:                   26.0 s (  0.007 h)
+  CPU time:                       25.7 s (  0.007 h)
+  Ratio:                          1.015
+</code></pre>
+<p>Afterwards, there should be a new file called <code>cube.vtk</code>. Start Paraview and open this file using <code>File-&gt;Open</code>, and <code>Apply</code> in the <code>Properties</code> toolbar. Color the mesh by <code>dose</code> to see the dose results.</p>
+<p><img src="example/./cube_dose.png" alt="View the dose results" /></p>
+<p>And you're done! That's a full <code>EGS_Mesh</code> simulation from start to finish. Color the mesh by <code>uncertainty</code> to see whether these results can be trusted, or if you need to run more histories to be sure. </p>
+<h3><a class="header" href="#going-further-1" id="going-further-1">Going further</a></h3>
+<ol>
+<li>
+<p>Refine the mesh and run another simulation. How did the simulation runtime change? Do the results look different? More refined meshes are required to observe accurate dose gradients.</p>
+</li>
+<li>
+<p>After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run 1B histories?</p>
+</li>
+<li>
+<p>Run an <code>EGS_XYZGeometry</code> simulation with a similar number of elements and compare the simulation runtimes. Typically, <code>EGS_Mesh</code> simulations are 2 to 3 times slower than <code>EGS_XYZGeometry</code>. Do you observe this? How do the results compare?</p>
+</li>
+<li>
+<p>The dose result is fairly uneven, especially for coarse meshes like this one. Why? Does this persist if you keep refining the mesh?</p>
+</li>
+</ol>
+<h3><a class="header" href="#references" id="references">References</a></h3>
+<ul>
+<li><a href="https://nrc-cnrc.github.io/EGSnrc/">EGSnrc home page</a></li>
+<li><a href="https://nrc-cnrc.github.io/EGSnrc/doc/pirs898/">EGSnrc <code>egs++</code> library manual</a></li>
+<li><a href="https://gmsh.info/doc/texinfo/gmsh.html">Gmsh reference manual</a></li>
+<li><a href="https://docs.paraview.org/en/latest/">Paraview manual</a></li>
+</ul>
+<h1><a class="header" href="#egsinp-syntax" id="egsinp-syntax">Egsinp syntax</a></h1>
+<p>The basic <code>EGS_Mesh</code> input file syntax is:</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = model.msh # your mesh here
+    :stop geometry:
+
+    simulation geometry = my_mesh
+:stop geometry definition:
+</code></pre>
+<p>This example embeds a mesh inside an air box. </p>
+<pre><code class="language-text">:start geometry definition: 
+    :start geometry:        
+        library = egs_mesh
+        name = my_mesh    
+        file = model.msh 
+    :stop geometry:
+
+    # define a 50cm air cube at the origin
+    :start geometry:
+        library = egs_box
+        name = my_box
+        box size = 50 50 50
+        :start media input:
+            media = air
+        :stop media input:
+    :stop geometry:
+    
+    # embed the mesh in the air box
+    :start geometry:
+        library = egs_genvelope
+        name = my_envelope
+        base geometry = my_box
+        inscribed geometries = my_mesh
+    :stop geometry
+
+    simulation geometry = my_envelope
+:stop geometry definition:
+</code></pre>
+<!---
+This example translates the mesh 5cm along the x-axis:
+```
+:start geometry definition: 
+    :start geometry:        
+        library = egs_mesh
+        name = my_mesh    
+        file = model.msh 
+    :stop geometry:
+
+    :start geometry:
+    :stop geometry:
+
+    simulation geometry = my_translated_mesh
+``` 
+-->
+<h1><a class="header" href="#step-file-simulation-wip" id="step-file-simulation-wip">STEP file simulation (WIP)</a></h1>
+<p>TODO</p>
+<h1><a class="header" href="#developer-reference-wip" id="developer-reference-wip">Developer reference (WIP)</a></h1>
+<p>TODO</p>
 
                     </main>
 

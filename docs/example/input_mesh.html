@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Example simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html" class="active"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write a egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html" class="active"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="../egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="../step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="../dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,17 +148,23 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#generate-an-input-mesh" id="generate-an-input-mesh">Generate an input mesh</a></h1>
+<p><code>EGS_Mesh</code> simulations have three steps:</p>
+<ol>
+<li>Create an input mesh file for your geometry</li>
+<li>Write an <code>egsinp</code> file for your simulation</li>
+<li>Run the simulation and view the results</li>
+</ol>
 <p>Before creating a mesh, we have decide what we want to simulate. This can range from a single tetrahedron to a multi-million element mesh derived from a CAD file. For this example, we're going to simulate a cube of water. The cube will have side lengths of 10cm for a total volume of 1000 cm³.</p>
 <p align="center">
-	<img width=400 src="./water_cube.png" alt="Water cube">
+	<img width="40%" src="./water_cube.png" alt="Water cube">
 </p>
 <h2><a class="header" href="#creating-the-geometry-using-gmsh" id="creating-the-geometry-using-gmsh">Creating the geometry using Gmsh</a></h2>
 <blockquote>
-<p>For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh.</p>
+<p>For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh ourselves.</p>
 </blockquote>
 <p>First, open Gmsh. Create a new script file using <code>File-&gt;New</code> called <code>cube.geo</code>. If prompted, use the <code>OpenCASCADE</code> geometry kernel. Create a 10cm cube using:</p>
 <p><strong><code>Geometry-&gt;Elementary entities-&gt;Add-&gt;Box</code></strong></p>
-<p>After adding the box, hit the <code>q</code> key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, <code>EGS_Mesh</code> assumes Gmsh input files are given in cm.</p>
+<p>After adding the box, hit the <code>q</code> key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, <code>EGS_Mesh</code> assumes mesh files are given in cm.</p>
 <p><img src="./gmsh_add_box_geom.png" alt="Adding a box" /></p>
 <h2><a class="header" href="#assigning-mesh-media" id="assigning-mesh-media">Assigning mesh media</a></h2>
 <p>Now, we have our cube geometry. But how will EGSnrc know it's made of water? We also have to assign material names to each volume. These will be read in by <code>EGS_Mesh</code> and each tetrahedron will be assigned the corresponding medium. Media names are specified using Gmsh <code>Physical Volumes</code>. Open the <code>Physical Volumes</code> dialog using:</p>
@@ -183,10 +189,30 @@ $EndPhysicalNames
 ... // continued
 </code></pre>
 <p>Here, the format version is confirmed to be 4.1, and the only media name is <code>H2O</code>. Further on in the file, node coordinates and element nodes are also stored. The <code>msh</code> format is documented <a href="http://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format">here</a>. </p>
-<p>With a fresh input mesh file in hand, we're ready to write an EGSnrc input file.</p>
-<p><strong>Note:</strong> the full mesh file contents are saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.</p>
+<p>With a fresh input mesh file in hand, you're ready to write an EGSnrc input file.</p>
+<h2><a class="header" href="#scripting-in-gmsh" id="scripting-in-gmsh">Scripting in Gmsh</a></h2>
+<p>If GUIs aren't your thing, Gmsh also has a scripting interface. Every action in the GUI is written to a project script file, which can be edited and reloaded on the fly.</p>
+<p>The script for this session looks like:</p>
+<pre><code class="language-text">SetFactory(&quot;OpenCASCADE&quot;);
+Box(1) = {0, 0, 0, 10, 10, 10};
+Physical Volume(&quot;H2O&quot;) = {1};
+</code></pre>
+<p>You can edit the script using <code>Geometry-&gt;Edit script</code>. After you make changes and save, reload it with <code>Geometry-&gt;Reload script</code>. Gmsh also provides language bindings for Python, C++, Julia and C, but this requires installing the Gmsh Software Development Kit.</p>
+<h3><a class="header" href="#going-further" id="going-further">Going further</a></h3>
+<ol>
+<li>
+<p>Try meshing another geometry, like a <code>Torus</code>.</p>
+</li>
+<li>
+<p>There are a few ways to generate a more refined mesh in Gmsh. The most straightforward way is to adjust the maximum element size (<code>Tools-&gt;Options-&gt;Mesh-&gt;General-&gt;Max element size</code>). Try obtaining a mesh with roughly 50,000 elements by varying the maximum element size. Before remeshing, hit the <code>0</code> key to reset the old mesh. If you need to refine just a few mesh areas, check out the Gmsh documentation about <a href="https://gmsh.info/doc/texinfo/gmsh.html#Specifying-mesh-element-sizes">size fields</a>.</p>
+</li>
+<li>
+<p>Change the meshing algorithm using <code>Tools-&gt;Options-&gt;Mesh-&gt;3D algorithm</code> and remesh. Do you observe any difference in the generated mesh? For complex models, sometimes one algorithm succeeds where another fails.</p>
+</li>
+</ol>
+<p><strong>Note:</strong> the full mesh file is saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.</p>
 <details>
-<summary> cube.msh </summary>
+<summary> cube.msh file </summary>
 <pre><code class="language-text">$MeshFormat
 4.1 0 8
 $EndMeshFormat

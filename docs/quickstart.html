@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting started - EGS_Mesh documentation</title>
+        <title>EGS_Mesh - EGS_Mesh documentation</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="quickstart.html" class="active"><strong aria-hidden="true">1.</strong> Getting started</a></li><li class="chapter-item expanded "><a href="example/example.html"><strong aria-hidden="true">2.</strong> Example simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write a egsinp file</a></li><li class="chapter-item expanded "><a href="example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="quickstart.html" class="active"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="example/run_sim.html"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -149,48 +149,17 @@
                     <main>
                         <h1><a class="header" href="#egs_mesh" id="egs_mesh">EGS_Mesh</a></h1>
 <p><code>EGS_Mesh</code> is a general-purpose unstructured tetrahedral mesh library for <a href="https://nrc-cnrc.github.io/EGSnrc/">EGSnrc</a>.</p>
-<p><code>EGS_Mesh</code> offers increased modelling flexibility over traditional voxel-based simulations. Instead of building up a geometry using a constructive-solid approach, <code>EGS_Mesh</code> takes a tetrahedral mesh file as input. Geometries created in CAD can be meshed and then simulated directly. <code>EGS_Mesh</code> relies on the standalone tool <a href="https://gmsh.info/">Gmsh</a> to generate meshes.</p>
-<h2><a class="header" href="#examples" id="examples">Examples</a></h2>
-<h3><a class="header" href="#basic-input-file-syntax" id="basic-input-file-syntax">Basic input file syntax</a></h3>
-<pre><code class="language-text">:start geometry description:
-    :start geometry:
-        library = egs_mesh
-        name = my_mesh
-        file = model.msh     # your mesh here
-    :stop geometry:
+<p><code>EGS_Mesh</code> offers modelling flexibility over traditional voxel-based simulations. Instead of building up a geometry using a constructive-solid approach, <code>EGS_Mesh</code> takes a tetrahedral mesh file as input. Tetrahedral meshes can accurately model complex geometries with fewer elements compared to hexahedral voxels. Geometries created in CAD can be meshed and then simulated directly. <code>EGS_Mesh</code> uses the Gmsh <code>msh</code> format as mesh input. Users can generate meshes using the standalone tool <a href="https://gmsh.info/">Gmsh</a>, or create a <code>msh</code> file from their data.</p>
+<p float="middle">
+	<img width="49%" src="./mesh_egg.png" alt="Mesh egg">
+	<img width="49%" src="./cube_dose.png" alt="Cube dose">
+</p>
+<p>If you're new to <code>EGS_Mesh</code>, you can work through a <a href="./example/example.html">guided example</a>. You can also consult the <a href="./egsinp_syntax.html"><code>egsinp</code> syntax reference</a>. If you want to simulate STEP files using <code>EGS_Mesh</code>, check out the <a href="./step/step.html">STEP file example</a>.</p>
+<!---
+## Credits
 
-    simulation geometry = my_mesh
-:stop geometry description:
-</code></pre>
-<h3><a class="header" href="#in-an-envelope" id="in-an-envelope">In an envelope</a></h3>
-<pre><code class="language-text">:start geometry definition: 
-    :start geometry:        
-        library = egs_mesh
-        name = my_mesh    
-        file = model.msh 
-    :stop geometry:
-
-    # define a 50cm air cube at the origin
-    :start geometry:
-        library = egs_box
-        name = my_box
-        box size = 50 50 50
-        :start media input:
-            media = air
-        :stop media input:
-    :stop geometry:
-    
-    # embed the mesh in the air box
-    :start geometry:
-        library = egs_genvelope
-        name = my_envelope
-        base geometry = my_box
-        inscribed geometries = my_mesh
-    :stop geometry
-
-    simulation geometry = my_envelope
-:stop geometry definition:
-</code></pre>
+`EGS_Mesh` was created and open-sourced by [Mevex Corporation](https://www.mevex.com/). The code is maintained by the Canadian National Research Council as part of [EGSnrc](https://github.com/nrc-cnrc/EGSnrc).
+-->
 <h2><a class="header" href="#alternatives" id="alternatives">Alternatives</a></h2>
 <p>Other Monte Carlo codes that support tetrahedral mesh simulations include:</p>
 <ul>
