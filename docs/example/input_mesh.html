@@ -159,7 +159,7 @@
 <p>First, open Gmsh. Create a new script file using <code>File-&gt;New</code> called <code>cube.geo</code>. If prompted, use the <code>OpenCASCADE</code> geometry kernel. Create a 10cm cube using:</p>
 <p><strong><code>Geometry-&gt;Elementary entities-&gt;Add-&gt;Box</code></strong></p>
 <p>After adding the box, hit the <code>q</code> key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, <code>EGS_Mesh</code> assumes Gmsh input files are given in cm.</p>
-<p><img src="./gmsh_add_box.png" alt="Adding a box" /></p>
+<p><img src="./gmsh_add_box_geom.png" alt="Adding a box" /></p>
 <h2><a class="header" href="#assigning-mesh-media" id="assigning-mesh-media">Assigning mesh media</a></h2>
 <p>Now, we have our cube geometry. But how will EGSnrc know it's made of water? We also have to assign material names to each volume. These will be read in by <code>EGS_Mesh</code> and each tetrahedron will be assigned the corresponding medium. Media names are specified using Gmsh <code>Physical Volumes</code>. Open the <code>Physical Volumes</code> dialog using:</p>
 <p><strong><code>Geometry-&gt;Physical groups-&gt;Add-&gt;Volume</code></strong></p>

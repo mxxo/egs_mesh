@@ -16,7 +16,7 @@ First, open Gmsh. Create a new script file using `File->New` called `cube.geo`. 
 
 After adding the box, hit the `q` key to quit the box dialog. Gmsh is unitless, so a length of 10 could have any unit attached. By default, `EGS_Mesh` assumes Gmsh input files are given in cm.
 
-![Adding a box](./gmsh_add_box.png)
+![Adding a box](./gmsh_add_box_geom.png)
 
 ## Assigning mesh media
 
