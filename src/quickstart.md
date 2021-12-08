@@ -5,7 +5,7 @@
 `EGS_Mesh` offers modelling flexibility over traditional voxel-based simulations. Instead of building up a geometry using a constructive-solid approach, `EGS_Mesh` takes a tetrahedral mesh file as input. Tetrahedral meshes can accurately model complex geometries with fewer elements compared to hexahedral voxels. Geometries created in CAD can be meshed and then simulated directly. `EGS_Mesh` uses the Gmsh `msh` format as mesh input. Users can generate meshes using the standalone tool [Gmsh](https://gmsh.info/), or create a `msh` file from their data.
 
 <p float="middle">
-	<img width="49%" src="./mesh_egg.png" alt="Mesh egg">
+	<img width="40%" src="./egg_dose.png" alt="Meshed egg dose">
 	<img width="49%" src="./cube_dose.png" alt="Cube dose">
 </p>
 
