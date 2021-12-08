@@ -7,4 +7,5 @@
     - [Run the simulation and view the results](./example/run_sim.md)
 - [Egsinp syntax](./egsinp_syntax.md)
 - [STEP file simulation (WIP)](./step/step.md)
+- [Mesh file reference (WIP)](./mesh/mesh_overview.md)
 - [Developer reference (WIP)](./dev/ref.md)

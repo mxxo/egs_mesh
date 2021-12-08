@@ -5,7 +5,7 @@
 2. Write an `egsinp` file for your simulation
 3. Run the simulation and view the results
 
-Before creating a mesh, we have decide what we want to simulate. This can range from a single tetrahedron to a multi-million element mesh derived from a CAD file. For this example, we're going to simulate a cube of water. The cube will have side lengths of 10cm for a total volume of 1000 cm³.
+For this example, you're going to simulate a cube of water. The cube will have side lengths of 10cm for a total volume of 1000 cm³.
 
 <p align="center">
 	<img width="40%" src="./water_cube.png" alt="Water cube">
@@ -13,7 +13,7 @@ Before creating a mesh, we have decide what we want to simulate. This can range 
 
 ## Creating the geometry using Gmsh
 
-> For this example, we're going to create the geometry in Gmsh directly. However, it's also possible to define our geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file without having to model geometries in Gmsh ourselves.
+> In this example, you'll create the geometry in Gmsh and then mesh it. It's also possible to define your geometry in CAD, export it to STEP, and then use Gmsh to mesh the STEP file.
 
 First, open Gmsh. Create a new script file using `File->New` called `cube.geo`. If prompted, use the `OpenCASCADE` geometry kernel. Create a 10cm cube using:
 
@@ -25,7 +25,7 @@ After adding the box, hit the `q` key to quit the box dialog. Gmsh is unitless, 
 
 ## Assigning mesh media
 
-Now, we have our cube geometry. But how will EGSnrc know it's made of water? We also have to assign material names to each volume. These will be read in by `EGS_Mesh` and each tetrahedron will be assigned the corresponding medium. Media names are specified using Gmsh `Physical Volumes`. Open the `Physical Volumes` dialog using:
+You've made a cube. But how will EGSnrc know it's water? You also have to assign EGSnrc media names to each volume. Media names are specified using Gmsh `Physical Volumes`. Open the `Physical Volumes` dialog using:
 
 **`Geometry->Physical groups->Add->Volume`**
 
@@ -34,13 +34,13 @@ In the `Name` input, enter `H2O` for water. Select the volume using the mouse, a
 ![Assigning media](./gmsh_add_media.png)
 
 ## Meshing the geometry
-Now, we have a geometry with media names attached. All that's left is to mesh the geometry. You can create a 3D mesh using:
+Now, you have a geometry with media names attached. All that's left is to mesh it. Generate a 3D mesh using:
 
 **`Mesh->3D`**
 
 ![Creating a mesh](./gmsh_mesh.png)
 
-After creating the mesh, you can find information like the number of tetrahedrons using `Tools->Statistics`. The mesh shown here has 1153 elements. Mesh visibility settings are in `Tools->Options->Mesh->Visibility`.
+After meshing, you can find information like the number of tetrahedrons using `Tools->Statistics`. The mesh shown here has 1153 elements. Mesh visibility settings are in `Tools->Options->Mesh->Visibility`.
 
 Write the mesh to disk using:
 
@@ -61,7 +61,7 @@ $EndPhysicalNames
 
 Here, the format version is confirmed to be 4.1, and the only media name is `H2O`. Further on in the file, node coordinates and element nodes are also stored. The `msh` format is documented [here](http://gmsh.info/doc/texinfo/gmsh.html#MSH-file-format). 
 
-With a fresh input mesh file in hand, you're ready to write an EGSnrc input file.
+With a fresh mesh file in hand, you're ready to write an [EGSnrc input file.](./egsinp.md)
 
 ## Scripting in Gmsh
 
@@ -81,10 +81,9 @@ You can edit the script using `Geometry->Edit script`. After you make changes an
 
 1. Try meshing another geometry, like a `Torus`.
 
-2. There are a few ways to generate a more refined mesh in Gmsh. The most straightforward way is to adjust the maximum element size (`Tools->Options->Mesh->General->Max element size`). Try obtaining a mesh with roughly 50,000 elements by varying the maximum element size. Before remeshing, hit the `0` key to reset the old mesh. If you need to refine just a few mesh areas, check out the Gmsh documentation about [size fields](https://gmsh.info/doc/texinfo/gmsh.html#Specifying-mesh-element-sizes).
+2. There are a few ways to generate a more refined mesh. One way is to adjust the maximum element size (`Tools->Options->Mesh->General->Max element size`). Try obtaining a mesh with roughly 50,000 elements by varying the maximum element size. Before remeshing, hit the `0` key to reset the old mesh. If you need to refine just a few mesh areas, check out the Gmsh documentation on [size fields](https://gmsh.info/doc/texinfo/gmsh.html#Specifying-mesh-element-sizes).
 
 3. Change the meshing algorithm using `Tools->Options->Mesh->3D algorithm` and remesh. Do you observe any difference in the generated mesh? For complex models, sometimes one algorithm succeeds where another fails.
-
 
 **Note:** the full mesh file is saved below. You can copy the contents to a file using the copy button on the top right and continue the walkthrough if there were any issues generating the mesh yourself.
 

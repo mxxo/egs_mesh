@@ -1,10 +1,10 @@
 # Run the simulation and view the results
 
-To run the simulation, we'll use the `mevegs` user code, which outputs the results to a VTK file to be analyzed in Paraview.
+To run the simulation, you'll use the `mevegs` EGSnrc user code, which outputs the results to a VTK file to be analyzed in Paraview.
 
 > As an `egs++` geometry, `EGS_Mesh` is technically usable from any `egs++` application. But `mevegs` converts `EGS_Mesh` results to VTK for quick analysis without any extra steps.
 
-Back when we created the mesh file, we also assigned media names. In this example, the only media was `H2O`, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding simulation data loaded. This can either be done by specifying a `pegs4dat` file using the `-p` flag on the command line, or defining the media in the input file. Either method is fine, but for this example we'll use a `pegs4dat` file. The file `tutor_data.pegs4dat` comes bundled with EGSnrc and has a definition of `H2O`.
+Back when you created the mesh file, you also assigned media names. In this example, the only media was `H2O`, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding data loaded. This can either be done by specifying a `pegs4dat` file using the `-p` flag on the command line, or defining the media in the input file. Either method is fine, but for this example you'll use a `pegs4dat` file. The file `tutor_data.pegs4dat` comes bundled with EGSnrc and has a definition of `H2O`.
 
 Enter the `mevegs` directory in `egs_home` and run the simulation:
 
@@ -61,7 +61,7 @@ And you're done! That's a full `EGS_Mesh` simulation from start to finish. Color
 
 1. Refine the mesh and run another simulation. How did the simulation runtime change? Do the results look different? More refined meshes are required to observe accurate dose gradients.
 
-2. After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run 1B histories?
+2. After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run one billion histories?
 
 3. Run an `EGS_XYZGeometry` simulation with a similar number of elements and compare the simulation runtimes. Typically, `EGS_Mesh` simulations are 2 to 3 times slower than `EGS_XYZGeometry`. Do you observe this? How do the results compare?
 

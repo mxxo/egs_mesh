@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html" class="active"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="../egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="../step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="../dev/ref.html"><strong aria-hidden="true">5.</strong> Developer reference (WIP)</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../quickstart.html"><strong aria-hidden="true">1.</strong> EGS_Mesh</a></li><li class="chapter-item expanded "><a href="../example/example.html"><strong aria-hidden="true">2.</strong> Guided simulation</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../example/input_mesh.html"><strong aria-hidden="true">2.1.</strong> Generate an input mesh</a></li><li class="chapter-item expanded "><a href="../example/egsinp.html"><strong aria-hidden="true">2.2.</strong> Write an egsinp file</a></li><li class="chapter-item expanded "><a href="../example/run_sim.html" class="active"><strong aria-hidden="true">2.3.</strong> Run the simulation and view the results</a></li></ol></li><li class="chapter-item expanded "><a href="../egsinp_syntax.html"><strong aria-hidden="true">3.</strong> Egsinp syntax</a></li><li class="chapter-item expanded "><a href="../step/step.html"><strong aria-hidden="true">4.</strong> STEP file simulation (WIP)</a></li><li class="chapter-item expanded "><a href="../mesh/mesh_overview.html"><strong aria-hidden="true">5.</strong> Mesh file reference (WIP)</a></li><li class="chapter-item expanded "><a href="../dev/ref.html"><strong aria-hidden="true">6.</strong> Developer reference (WIP)</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -148,11 +148,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1><a class="header" href="#run-the-simulation-and-view-the-results" id="run-the-simulation-and-view-the-results">Run the simulation and view the results</a></h1>
-<p>To run the simulation, we'll use the <code>mevegs</code> user code, which outputs the results to a VTK file to be analyzed in Paraview.</p>
+<p>To run the simulation, you'll use the <code>mevegs</code> EGSnrc user code, which outputs the results to a VTK file to be analyzed in Paraview.</p>
 <blockquote>
 <p>As an <code>egs++</code> geometry, <code>EGS_Mesh</code> is technically usable from any <code>egs++</code> application. But <code>mevegs</code> converts <code>EGS_Mesh</code> results to VTK for quick analysis without any extra steps.</p>
 </blockquote>
-<p>Back when we created the mesh file, we also assigned media names. In this example, the only media was <code>H2O</code>, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding simulation data loaded. This can either be done by specifying a <code>pegs4dat</code> file using the <code>-p</code> flag on the command line, or defining the media in the input file. Either method is fine, but for this example we'll use a <code>pegs4dat</code> file. The file <code>tutor_data.pegs4dat</code> comes bundled with EGSnrc and has a definition of <code>H2O</code>.</p>
+<p>Back when you created the mesh file, you also assigned media names. In this example, the only media was <code>H2O</code>, but simulations can have many different media. For all mesh media, you have to ensure that EGSnrc has the corresponding data loaded. This can either be done by specifying a <code>pegs4dat</code> file using the <code>-p</code> flag on the command line, or defining the media in the input file. Either method is fine, but for this example you'll use a <code>pegs4dat</code> file. The file <code>tutor_data.pegs4dat</code> comes bundled with EGSnrc and has a definition of <code>H2O</code>.</p>
 <p>Enter the <code>mevegs</code> directory in <code>egs_home</code> and run the simulation:</p>
 <p><code>mevegs -i cube.egsinp -p tutor_data.pegs4dat</code></p>
 <p>Make sure the <code>cube.msh</code> file is in the same directory you're running the code in.</p>
@@ -201,7 +201,7 @@ Finished simulation
 <p>Refine the mesh and run another simulation. How did the simulation runtime change? Do the results look different? More refined meshes are required to observe accurate dose gradients.</p>
 </li>
 <li>
-<p>After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run 1B histories?</p>
+<p>After the simulation, the histories per hour is reported. Run a simulation with more histories and check if the histories per hour changes. Given this number, how long would it take you to run one billion histories?</p>
 </li>
 <li>
 <p>Run an <code>EGS_XYZGeometry</code> simulation with a similar number of elements and compare the simulation runtimes. Typically, <code>EGS_Mesh</code> simulations are 2 to 3 times slower than <code>EGS_XYZGeometry</code>. Do you observe this? How do the results compare?</p>

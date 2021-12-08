@@ -1,12 +1,12 @@
 # Write an egsinp file
 
-Now, you're ready to make a new simulation input file. The three required input file sections are:
+Once you have a mesh file, you're ready to write the input file. The three required input file sections are:
 
 1. Geometry definition
 2. Source definition 
 3. Run control
 
-First up, let's define the mesh geometry. An `EGS_Mesh` geometry block looks like:
+First, define the mesh geometry. An `EGS_Mesh` geometry block looks like:
 
 ```text
 :start geometry definition:
@@ -19,9 +19,9 @@ First up, let's define the mesh geometry. An `EGS_Mesh` geometry block looks lik
 :stop geometry definition:
 ```
 
-The only input we need to adjust is the mesh `file`. If you're following the guide, this file should be called `cube.msh`.
+The only input you need to adjust is the mesh `file`. If you're following along, this should be named `cube.msh`.
 
-Next, the source. Let's define an exterior point source. The meshed box starts at the origin and extends 10cm along `x`, `y` and `z`. So placing the source at `(5, 5, -1)` means the source will be 1cm away from the box's `-z` face. We'll simulate a 10MeV photon monoenergetic point source.
+Next, the source. Let's define an exterior point source. The meshed box starts at the origin and extends 10cm along `x`, `y` and `z`. So placing the source at `(5, 5, -1)` means the source will be 1cm away from the box's `-z` face. For this example, you'll simulate a 10MeV photon monoenergetic point source.
 
 ```text
 :start source definition:
