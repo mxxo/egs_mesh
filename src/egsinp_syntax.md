@@ -14,6 +14,10 @@ The basic `EGS_Mesh` input file syntax is:
 :stop geometry definition:
 ```
 
+However, most meshes should be simulated in an envelope, otherwise particles exiting the mesh are discarded immediately, even if they would have reentered the mesh later on.
+
+### In an envelope
+
 This example embeds a mesh inside an air box. 
 
 ```text
@@ -43,6 +47,24 @@ This example embeds a mesh inside an air box.
     :stop geometry:
 
     simulation geometry = my_envelope
+:stop geometry definition:
+```
+
+### Scaling the mesh
+
+Mesh files are assumed to be in `cm`. The `scale` key can be used to scale the
+mesh if the file uses different units.
+
+```text
+:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = model.msh
+        scale = 0.1 # multiply all node coordinates by 0.1 (e.g. mm to cm)
+    :stop geometry:
+
+    simulation geometry = my_mesh
 :stop geometry definition:
 ```
 

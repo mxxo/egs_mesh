@@ -2371,6 +2371,8 @@ Finished simulation
     simulation geometry = my_mesh
 :stop geometry definition:
 </code></pre>
+<p>However, most meshes should be simulated in an envelope, otherwise particles exiting the mesh are discarded immediately, even if they would have reentered the mesh later on.</p>
+<h3><a class="header" href="#in-an-envelope" id="in-an-envelope">In an envelope</a></h3>
 <p>This example embeds a mesh inside an air box. </p>
 <pre><code class="language-text">:start geometry definition: 
     :start geometry:        
@@ -2398,6 +2400,20 @@ Finished simulation
     :stop geometry:
 
     simulation geometry = my_envelope
+:stop geometry definition:
+</code></pre>
+<h3><a class="header" href="#scaling-the-mesh" id="scaling-the-mesh">Scaling the mesh</a></h3>
+<p>Mesh files are assumed to be in <code>cm</code>. The <code>scale</code> key can be used to scale the
+mesh if the file uses different units.</p>
+<pre><code class="language-text">:start geometry definition:
+    :start geometry:
+        library = egs_mesh
+        name = my_mesh
+        file = model.msh
+        scale = 0.1 # multiply all node coordinates by 0.1 (e.g. mm to cm)
+    :stop geometry:
+
+    simulation geometry = my_mesh
 :stop geometry definition:
 </code></pre>
 <!---
