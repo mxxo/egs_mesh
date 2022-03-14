@@ -40,7 +40,7 @@ This example embeds a mesh inside an air box.
         name = my_envelope
         base geometry = my_box
         inscribed geometries = my_mesh
-    :stop geometry
+    :stop geometry:
 
     simulation geometry = my_envelope
 :stop geometry definition:
